@@ -15,6 +15,11 @@ class SettingsModal extends StatelessWidget {
     required this.onClose,
   });
 
+  String _formatVersion(String version) {
+    if (version.isEmpty) return 'v1.0.0';
+    return version.startsWith('v') ? version : 'v$version';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -160,6 +165,42 @@ class SettingsModal extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.1),
+                ),
+              ),
+              child: Consumer<LauncherProvider>(
+                builder: (context, provider, _) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Versão do Launcher',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        _formatVersion(provider.currentVersion),
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.7),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ],

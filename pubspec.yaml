@@ -1,7 +1,7 @@
 name: ntelauncher
 description: "NTE PT-BR Launcher"
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: ^3.11.5
@@ -14,11 +14,12 @@ dependencies:
   http: 1.6.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  file_picker: 11.0.2
+  file_picker: ^11.0.2
   window_manager: 0.5.1
   path_provider: 2.1.5
   path: 1.9.1
   url_launcher: 6.3.2
+  package_info_plus: 8.3.0
 
 dev_dependencies:
   flutter_test:

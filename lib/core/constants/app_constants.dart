@@ -5,6 +5,11 @@ class AppConstants {
   static const String githubRepo = 'nte-pt-br';
   static const String githubApiUrl = 'https://api.github.com/repos/$githubOwner/$githubRepo/releases/latest';
 
+  static const String launcherGithubOwner = 'julhin123';
+  static const String launcherGithubRepo = 'ntelauncher-ptbr';
+  static const String launcherGithubApiUrl = 'https://api.github.com/repos/$launcherGithubOwner/$launcherGithubRepo/releases/latest';
+  static const String launcherReleasesPageUrl = 'https://github.com/$launcherGithubOwner/$launcherGithubRepo/releases/latest';
+
   static const List<String> binFiles = [
     'UniversalSigBypasser.asi',
     'version.dll',

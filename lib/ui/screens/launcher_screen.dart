@@ -6,6 +6,7 @@ import '../widgets/custom_window_bar.dart';
 import '../widgets/play_button.dart';
 import '../widgets/progress_panel.dart';
 import '../widgets/footer_warning.dart';
+import '../widgets/app_update_modal.dart';
 import '../widgets/game_not_found_modal.dart';
 import '../widgets/settings_modal.dart';
 import '../widgets/translation_removed_modal.dart';
@@ -116,6 +117,29 @@ class _LauncherScreenState extends State<LauncherScreen> {
                 onDismiss: () {
                   Navigator.of(context).pop();
                   provider.dismissNotFoundModal();
+                },
+              ),
+            );
+          });
+        }
+
+        if (provider.showUpdateModal) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              barrierColor: Colors.black.withValues(alpha: 0.7),
+              builder: (_) => AppUpdateModal(
+                currentVersion: provider.currentVersion,
+                latestVersion: provider.latestLauncherVersion ?? '',
+                onDownload: () {
+                  Navigator.of(context).pop();
+                  provider.openLauncherDownloadUrl();
+                  provider.dismissUpdateModal();
+                },
+                onSkip: () {
+                  Navigator.of(context).pop();
+                  provider.skipLauncherVersion();
                 },
               ),
             );

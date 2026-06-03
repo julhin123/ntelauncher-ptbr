@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../core/constants/app_constants.dart';
 import '../core/services/settings_service.dart';
 import '../core/services/github_service.dart';
@@ -34,6 +36,9 @@ class LauncherProvider extends ChangeNotifier {
   String? _latestVersion;
   bool _showNotFoundModal = false;
   Timer? _checkingTimer;
+  String _currentVersion = '';
+  String? _latestLauncherVersion;
+  bool _showUpdateModal = false;
 
   LauncherState get state => _state;
   String? get errorMessage => _errorMessage;
@@ -44,6 +49,9 @@ class LauncherProvider extends ChangeNotifier {
   String? get latestVersion => _latestVersion;
   String? get installedVersion => _settingsService.lastDownloadedVersion;
   bool get showNotFoundModal => _showNotFoundModal;
+  String get currentVersion => _currentVersion;
+  String? get latestLauncherVersion => _latestLauncherVersion;
+  bool get showUpdateModal => _showUpdateModal;
 
   LauncherProvider(this._settingsService) {
     _autoLaunch = _settingsService.autoLaunchOnFinish;
@@ -69,6 +77,7 @@ class LauncherProvider extends ChangeNotifier {
 
     _showNotFoundModal = false;
     await _checkForUpdates();
+    await _checkForLauncherUpdate();
   }
 
   void _startCheckingAnimation() {
@@ -209,6 +218,45 @@ class LauncherProvider extends ChangeNotifier {
 
   void dismissNotFoundModal() {
     _showNotFoundModal = false;
+    notifyListeners();
+  }
+
+  Future<void> _checkForLauncherUpdate() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      _currentVersion = packageInfo.version;
+
+      final release = await _gitHubService.getLatestLauncherRelease();
+      _latestLauncherVersion = release.tagName;
+
+      final skippedVersion = _settingsService.skippedLauncherVersion;
+      final cleanCurrent = _currentVersion.replaceFirst('v', '');
+      final cleanLatest = release.tagName.replaceFirst('v', '');
+
+      if (cleanCurrent != cleanLatest && release.tagName != skippedVersion) {
+        _showUpdateModal = true;
+        notifyListeners();
+      }
+    } catch (e) {
+      // Silenciosamente ignora erros de verificação de atualização do launcher
+    }
+  }
+
+  Future<void> openLauncherDownloadUrl() async {
+    final uri = Uri.parse(AppConstants.launcherReleasesPageUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  void skipLauncherVersion() {
+    _settingsService.skippedLauncherVersion = _latestLauncherVersion;
+    _showUpdateModal = false;
+    notifyListeners();
+  }
+
+  void dismissUpdateModal() {
+    _showUpdateModal = false;
     notifyListeners();
   }
 

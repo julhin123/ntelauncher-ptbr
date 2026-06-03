@@ -59,6 +59,20 @@ class GitHubService {
     return GitHubRelease.fromJson(json);
   }
 
+  Future<GitHubRelease> getLatestLauncherRelease() async {
+    final response = await http.get(
+      Uri.parse(AppConstants.launcherGithubApiUrl),
+      headers: {'Accept': 'application/vnd.github.v3+json'},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Erro ao buscar release do launcher: ${response.statusCode}');
+    }
+
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    return GitHubRelease.fromJson(json);
+  }
+
   List<GitHubAsset> getRequiredAssets(GitHubRelease release) {
     final requiredNames = [
       ...AppConstants.binFiles,

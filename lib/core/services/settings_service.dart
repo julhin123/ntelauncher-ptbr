@@ -5,6 +5,7 @@ class SettingsService {
   static const String _keyGameDir = 'gameDirectory';
   static const String _keyLastVersion = 'lastDownloadedVersion';
   static const String _keyAutoLaunch = 'autoLaunchOnFinish';
+  static const String _keySkippedLauncherVersion = 'skippedLauncherVersion';
 
   late Box _box;
 
@@ -33,4 +34,13 @@ class SettingsService {
 
   bool get autoLaunchOnFinish => _box.get(_keyAutoLaunch, defaultValue: false) as bool;
   set autoLaunchOnFinish(bool value) => _box.put(_keyAutoLaunch, value);
+
+  String? get skippedLauncherVersion => _box.get(_keySkippedLauncherVersion) as String?;
+  set skippedLauncherVersion(String? value) {
+    if (value == null) {
+      _box.delete(_keySkippedLauncherVersion);
+    } else {
+      _box.put(_keySkippedLauncherVersion, value);
+    }
+  }
 }
