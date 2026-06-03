@@ -6,7 +6,7 @@
   #define MyAppVersion "1.0.0"
 #endif
 #define MyAppPublisher "julhin123"
-#define MyAppExeName "ntelauncher.exe"
+#define MyAppExeName "nteptbr.exe"
 
 [Setup]
 AppId={{NTE-Launcher-PTBR-2026}
