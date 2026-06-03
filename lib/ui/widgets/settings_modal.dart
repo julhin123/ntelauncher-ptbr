@@ -20,6 +20,35 @@ class SettingsModal extends StatelessWidget {
     return version.startsWith('v') ? version : 'v$version';
   }
 
+  Widget _buildRepoButton({
+    required BuildContext context,
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    return Expanded(
+      child: SizedBox(
+        height: 40,
+        child: OutlinedButton.icon(
+          onPressed: onPressed,
+          icon: const Icon(Icons.open_in_new, size: 16),
+          label: Text(
+            label,
+            style: const TextStyle(fontSize: 12),
+          ),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Colors.white.withValues(alpha: 0.8),
+            side: BorderSide(
+              color: Colors.white.withValues(alpha: 0.2),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -166,6 +195,35 @@ class SettingsModal extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Repositórios',
+              style: TextStyle(
+                color: AppColors.primary,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Consumer<LauncherProvider>(
+              builder: (context, provider, _) {
+                return Row(
+                  children: [
+                    _buildRepoButton(
+                      context: context,
+                      label: 'Tradução',
+                      onPressed: provider.openTranslationRepoUrl,
+                    ),
+                    const SizedBox(width: 12),
+                    _buildRepoButton(
+                      context: context,
+                      label: 'Launcher',
+                      onPressed: provider.openLauncherRepoUrl,
+                    ),
+                  ],
+                );
+              },
             ),
             const SizedBox(height: 24),
             Container(

@@ -249,6 +249,20 @@ class LauncherProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> openTranslationRepoUrl() async {
+    final uri = Uri.parse(AppConstants.translationRepoUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> openLauncherRepoUrl() async {
+    final uri = Uri.parse(AppConstants.launcherRepoUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
   void skipLauncherVersion() {
     _settingsService.skippedLauncherVersion = _latestLauncherVersion;
     _showUpdateModal = false;
