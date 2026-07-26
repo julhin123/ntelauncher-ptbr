@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/services/settings_service.dart';
+import 'core/services/trusted_certificates_service.dart';
 import 'core/services/window_service.dart';
 import 'providers/launcher_provider.dart';
 import 'ui/theme/app_theme.dart';
@@ -8,6 +9,8 @@ import 'ui/screens/launcher_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await TrustedCertificatesService.initialize();
 
   final windowService = WindowService();
   await windowService.init();

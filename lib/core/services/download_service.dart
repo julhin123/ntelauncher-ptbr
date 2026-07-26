@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'github_service.dart';
+import 'trusted_certificates_service.dart';
 
 class DownloadProgress {
   final double progress;
@@ -17,7 +19,15 @@ class DownloadProgress {
 }
 
 class DownloadService {
-  final Dio _dio = Dio();
+  final Dio _dio = _createDio();
+
+  static Dio _createDio() {
+    final dio = Dio();
+    dio.httpClientAdapter = IOHttpClientAdapter(
+      createHttpClient: TrustedCertificatesService.createHttpClient,
+    );
+    return dio;
+  }
 
   Future<void> downloadAssets({
     required List<GitHubAsset> assets,

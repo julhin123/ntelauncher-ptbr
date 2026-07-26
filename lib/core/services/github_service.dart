@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import '../constants/app_constants.dart';
+import 'trusted_certificates_service.dart';
 
 class GitHubRelease {
   final String tagName;
@@ -45,8 +47,12 @@ class GitHubAsset {
 }
 
 class GitHubService {
+  final http.Client _client = IOClient(
+    TrustedCertificatesService.createHttpClient(),
+  );
+
   Future<GitHubRelease> getLatestRelease() async {
-    final response = await http.get(
+    final response = await _client.get(
       Uri.parse(AppConstants.githubApiUrl),
       headers: {'Accept': 'application/vnd.github.v3+json'},
     );
@@ -60,7 +66,7 @@ class GitHubService {
   }
 
   Future<GitHubRelease> getLatestLauncherRelease() async {
-    final response = await http.get(
+    final response = await _client.get(
       Uri.parse(AppConstants.launcherGithubApiUrl),
       headers: {'Accept': 'application/vnd.github.v3+json'},
     );
