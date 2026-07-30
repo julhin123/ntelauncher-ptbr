@@ -47,6 +47,8 @@ class GitHubAsset {
 }
 
 class GitHubService {
+  static const String _userAgent = 'ntelauncher/1.0.2';
+
   final http.Client _client = IOClient(
     TrustedCertificatesService.createHttpClient(),
   );
@@ -54,7 +56,10 @@ class GitHubService {
   Future<GitHubRelease> getLatestRelease() async {
     final response = await _client.get(
       Uri.parse(AppConstants.githubApiUrl),
-      headers: {'Accept': 'application/vnd.github.v3+json'},
+      headers: {
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': _userAgent,
+      },
     );
 
     if (response.statusCode != 200) {
@@ -68,7 +73,10 @@ class GitHubService {
   Future<GitHubRelease> getLatestLauncherRelease() async {
     final response = await _client.get(
       Uri.parse(AppConstants.launcherGithubApiUrl),
-      headers: {'Accept': 'application/vnd.github.v3+json'},
+      headers: {
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': _userAgent,
+      },
     );
 
     if (response.statusCode != 200) {
